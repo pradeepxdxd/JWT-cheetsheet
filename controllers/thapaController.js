@@ -66,23 +66,51 @@ exports.thapaLoginController = async (req, res) => {
 }
 
 exports.thapaLogoutController = async (req, res) => {
-    try{
+    try {
         req.user.tokens = req.user.tokens.filter((token => {
             return token.token !== req.token;
         }))
-        
+
         res.clearCookie('_token');
         await req.user.save();
         res.status(200).send({
-            'statusCode' : 200,
-            'msg' : 'Logout Successfully'
+            'statusCode': 200,
+            'msg': 'Logout Successfully'
         });
     }
-    catch(err){
+    catch (err) {
         res.status(500)
             .send({
-                'statusCode' : 500,
-                'err' : 'Internal Server Error'
+                'statusCode': 500,
+                'err': 'Internal Server Error'
+            })
+    }
+}
+
+exports.thapaUpdateUser = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { name, email, password, phone } = req.body;
+        const hash = bcrypt.hashSync(password, 10);
+
+        await ThapaRegisModel.updateOne({ _id: id }, { $set: { name: name, email: email, password: hash, phone: phone } }).then(data => {
+            res.status(200).send({
+                'statusCode': 200,
+                'msg': 'user updated sucessfully',
+                data
+            })
+        }).catch(err => {
+            res.status(400).send({
+                'statusCode': 400,
+                'err': 'something went wrong, please try again'
+            })
+        })
+    }
+    catch (err) {
+        res.status(500)
+            .send({
+                'statusCode': 500,
+                'err': 'Internal Server Error'
             })
     }
 }
