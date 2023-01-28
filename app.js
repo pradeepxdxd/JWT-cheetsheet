@@ -22,10 +22,12 @@ app.set('view engine', 'handlebars');
 app.set('views', './views');
 app.engine('handlebars', exphbs.engine());
 
-const route = require('./routes/routes');
+const routes = require('./routes/routes');
 const thapaRoutes = require('./routes/thapaRoutes');
+const bearerRoutes = require('./routes/BearerPractice.routes');
 
-app.use('/', route);
+app.use('/', routes);
 app.use('/thapa', thapaRoutes);
+app.use('/bearer', bearerRoutes);
 
 app.listen(port, () => console.log(port));

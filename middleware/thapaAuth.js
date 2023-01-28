@@ -26,7 +26,7 @@ const thapaEdit = async (req, res, next) => {
         
         const validUser = jwt.verify(token, 'pradeepbiswas');
 
-        next();
+        // next();
     }
     catch (err) {
         res.status(400).send(err);
